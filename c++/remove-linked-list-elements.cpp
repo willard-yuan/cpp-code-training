@@ -4,14 +4,14 @@ using namespace std;
 struct ListNode {
       int val;
       ListNode *next;
-      ListNode(int x) : val(x), next(NULL) {}
+      ListNode(int x) : val(x), next(NULL) {} //æ„é€ å‡½æ•°åˆå§‹åŒ–åˆ—è¡¨ http://www.cnblogs.com/bluetzar/articles/1223169.html
   };
 
-/*·½°¸Ò»£ºÓÃÒ»¸öÖ¸Õë*/
+/*æ–¹æ¡ˆä¸€ï¼šç”¨ä¸€ä¸ªæŒ‡é’ˆ*/
 class Solution {
 public:
     ListNode* removeElements(ListNode* head, int val) {
-		///*µÚÒ»¸öwhileÓÃÓÚ½â¾öÏÂÃæÕâ¸öÎÊÌâ
+		///*ç¬¬ä¸€ä¸ªwhileç”¨äºè§£å†³ä¸‹é¢è¿™ä¸ªé—®é¢˜
 		//Input:	[1], 1
 		//Output:	{1}
 		//Expected:	{}
@@ -36,7 +36,7 @@ public:
 };
 
 
-/*·½°¸¶ş£ºÓÃÁ½¸öÖ¸Õë
+/*æ–¹æ¡ˆäºŒï¼šç”¨ä¸¤ä¸ªæŒ‡é’ˆ
 class Solution {
 public:
     ListNode* removeElements(ListNode* head, int val) {
