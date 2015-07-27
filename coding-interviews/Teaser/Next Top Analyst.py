@@ -30,7 +30,7 @@ def viewProbHeatMaps(lonAxisStart, lonAxisStop, lonAxisInterval, latAxisStart, l
 	probFromGate = gateRule(mapPoints, 4700, 3877, 13.377689, 52.516288, 6371)
 
 	#calculate probability according to satellite rule
-	probFromSatellite = satelliteRule(mapPoints, 13.39915, 52.590117, 13.553989, 52.437385, 6371, 2400/2, 0)
+	probFromSatellite = satelliteRule(mapPoints, 13.39915, 52.590117, 13.553989, 52.437385, 6371, 2400/2, 0) # sigma = 2400/1.96，这里除以2是错误的
 
 	#compile all probabilities
 	probTotal = compileProbs(probFromRiver, probFromGate, probFromSatellite)
@@ -73,7 +73,7 @@ def riverRule(allPoints, mu, sigma, earthR): # 计算河流的概率密度
 		shortestDis = getShortestDisLinePoint(iLon, iLat, riverCoords, earthR)
 
 		#for distance from river, get prob of analyst existence
-		probRiver = mlab.normpdf(shortestDis,mu,sigma)
+		probRiver = mlab.normpdf(shortestDis,mu,sigma) # 计算概率
 		probRivers.append(probRiver)
 	return probRivers
 
@@ -94,9 +94,9 @@ def getLonLat(coordPair):
 
 def getShortestDisLinePoint(pointLon, pointLat, lineCoords, earthR): # 获取点到直线的最短距离
 	#get shortest distance between point and line
-	line = LineString(lineCoords) 
+	line = LineString(lineCoords) # http://toblerity.org/shapely/manual.html
 	point = Point(pointLon, pointLat)
-	closestCoord = line.interpolate(line.project(point))
+	closestCoord = line.interpolate(line.project(point)) # 获取距离最近的点
 	distance = haversine(pointLon, pointLat, closestCoord.x, closestCoord.y, earthR)
 	return distance
 
@@ -126,13 +126,13 @@ def gateRule(allPoints, mu, mode, fixedPointLon, fixedPointLat, earthR):
 		probGates.append(probGate)
 	return probGates
 
-def haversine(lon1, lat1, lon2, lat2, earthR):
+def haversine(lon1, lat1, lon2, lat2, earthR): # https://en.wikipedia.org/wiki/Haversine_formula
     """
     Calculate the great circle distance between two points 
     on the earth (specified in decimal degrees)
     """
     # convert decimal degrees to radians 
-    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
+    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2]) #将经纬度转成弧度
 
     # haversine formula 
     dlon = lon2 - lon1 
@@ -166,11 +166,11 @@ def satelliteRule(allPoints, lonStart, latStart, lonEnd, latEnd, earthR, sigma, 
 		shortestDis = getShortestDisLinePoint(iLon, iLat, pathCoords, earthR)
 
 		#for distance from river, get prob of analyst existence
-		probPath = mlab.normpdf(shortestDis,mu,sigma)
+		probPath = mlab.normpdf(shortestDis, mu, sigma)
 		probPaths.append(probPath)
 	return probPaths
 
-def compileProbs(probs1, probs2, probs3):
+def compileProbs(probs1, probs2, probs3):  # 联合概率密度
 	totalProbs = []
 	for i in range(0, len(probs1)):
 		totalProb = probs1[i] * probs2[i] * probs3[i]
