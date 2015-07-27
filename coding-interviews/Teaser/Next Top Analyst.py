@@ -102,12 +102,17 @@ def getShortestDisLinePoint(pointLon, pointLat, lineCoords, earthR): # 获取点
 
 def gateRule(allPoints, mu, mode, fixedPointLon, fixedPointLat, earthR):
 	#find sd using mode(X)=exp(mu-var)
-	var = mu-math.log(mode)
-	sigma = math.sqrt(var)
+	#var = mu-math.log(mode)
+	#sigma = math.sqrt(var)
 
 	#I have spent some time trying to get lognorm function to work, this calc of mu & sigma feels wrong - I'm a bit stuck
-	muLog = np.log(mu)
-	sigmaLog = np.log(sigma)
+	#muLog = np.log(mu)
+	#sigmaLog = np.log(sigma)
+
+	# https://rpubs.com/phat/zalando
+	# https://en.wikipedia.org/wiki/Mode_(statistics)
+    muLog = math.sqrt((2/3)*(np.log(mu)-np.log(mode)))
+    sigmaLog = (2*np.log(mu)+np.log(mode))/3
 	
 	#loop through map to get probabilities of analyst being at location - due to gate
 	probGates=[]
@@ -119,7 +124,7 @@ def gateRule(allPoints, mu, mode, fixedPointLon, fixedPointLat, earthR):
 
 		#for distance from gate, get prob of analyst existence
 		if shortestDis > 0:
-			probGate = stats.lognorm.pdf(shortestDis, sigmaLog, 0, np.exp(muLog))
+			probGate = stats.lognorm.pdf(shortestDis, sigmaLog, 0, muLog))
 		else:
 			probGate = 0
 
