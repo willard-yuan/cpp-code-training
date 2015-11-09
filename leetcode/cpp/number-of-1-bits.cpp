@@ -7,8 +7,7 @@ class Solution {
 public:
     int hammingWeight(uint32_t n) {
         int count = 0;
-		int tmp = n;
-        std::bitset<sizeof(n)*8> x(tmp);
+        std::bitset<sizeof(n)*8> x(n);
         for (int i=0;i<sizeof(x)*8;i++)
         {
             if (x[i]==1)
