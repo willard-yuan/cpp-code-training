@@ -7,23 +7,25 @@
 
 输入: [0,1,2,3,4,5,6,7,9]
 输出: 8
+
+解题思路：有序，说明可以采用二分
 */
 
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
-        int i = 0;
-        int j = nums.size() - 1;
+        int left = 0;
+        int right = nums.size() - 1;
         int mid = 0;
-        while (i <= j) {
-            mid = (i + j) / 2;
+        while (left <= right) {
+            mid = (left + right) / 2;
             if (mid == nums[mid]) {
-                i = mid + 1;
+                left = mid + 1;  // 说明左半部分是完全一样的，不一样的部分在右半部分
             } else {
-                j = mid - 1;
+                right = mid - 1;
             }
         }
-        return i;
+        return left;
     }
 };
 
